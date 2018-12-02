@@ -2,6 +2,7 @@ import java.util.Scanner;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Problem2 {
     public static void main (String[] args) throws IOException {
@@ -23,19 +24,22 @@ public class Problem2 {
             String id = in.next();
             ids.add(id);
         }
+        // O(n^2) run time --> slow but input size not large so it is adequate
         for (int i = 0; i < ids.size(); i += 1) {
             String str = ids.get(i);
             for (int j = i + 1; j < ids.size(); j += 1) {
                 String cmpr = ids.get(j);
                 int count = 0;
+                int index = 0;
                 for (int z = 0; z < str.length(); z += 1) {
                     if (str.charAt(z) == cmpr.charAt(z)) {
                         count += 1;
+                    } else {
+                        index = z;
                     }
                 }
                 if (count == cmpr.length() - 1) {
-                    System.out.println(str);
-                    System.out.println(cmpr);
+                    System.out.println(str.substring(0, index) + str.substring(index + 1));
                 }
             }
         }
