@@ -1,16 +1,17 @@
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
 
 public class Problem3 {
-    static int[][] fabric = new int[2000][2000];
-    static boolean isClean = false;
+    static int[][] fabric = new int[1000][1000]; //large piece of fabric
+    static boolean isClean = false; //for part 2
+    static int count = 0;
     public static void main (String[] args) throws IOException{
+        //part 1
         Scanner in = new Scanner(new File("input.txt"));
         while (in.hasNext()) {
-            String id = in.next();
-            String at = in.next();
+            in.next();
+            in.next();
             String distances = in.next();
             String dim = in.next();
             int div1 = distances.indexOf(',');
@@ -21,24 +22,16 @@ public class Problem3 {
             int height = Integer.parseInt(dim.substring(div2 + 1));
             addFabric(fromLeft, fromTop, width, height);
         }
-        int count = 0;
-        for (int i = 0; i < fabric.length; i += 1) {
-            for (int j = 0; j < fabric[i].length; j += 1) {
-                if (fabric[i][j] > 1) {
-                    count += 1;
-                }
-            }
-        }
         System.out.println(count);
         in.close();
         //part 2
         in = new Scanner(new File("input.txt"));
         while (in.hasNext()) {
             String id = in.next();
-            String at = in.next();
+            in.next();
             String distances = in.next();
             String dim = in.next();
-            int div1 = distances.indexOf(',');
+            int div1 = distances.indexOf(','); //parsing string into int and removing dividers
             int div2 = dim.indexOf('x');
             int fromLeft = Integer.parseInt(distances.substring(0, div1));
             int fromTop = Integer.parseInt(distances.substring(div1 + 1, distances.length() - 1));
@@ -55,6 +48,9 @@ public class Problem3 {
         for (int i = top; i < top + height; i += 1) {
             for (int j = left; j < left + width; j += 1) {
                 fabric[i][j] += 1;
+                if (fabric[i][j] == 2) {
+                    count += 1;
+                }
             }
         }
     }
@@ -69,5 +65,4 @@ public class Problem3 {
         }
         isClean = clean;
     }
-
 }
