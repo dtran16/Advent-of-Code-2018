@@ -1,6 +1,7 @@
 import java.util.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.regex.*;
 
 public class Problem4 {
     static ArrayList <Timestamp> stamps = new ArrayList<> (); //list of time stamps
@@ -89,24 +90,21 @@ public class Problem4 {
         Scanner in = new Scanner(new File("input.txt"));  //     but was not familiar with them
         while (in.hasNext()) {
             String stamp = in.nextLine();
-            int month = Integer.parseInt(stamp.substring(6, 8));
-            int day = Integer.parseInt(stamp.substring(9,11));
-            int hr = Integer.parseInt(stamp.substring(12, 14));
-            int min = Integer.parseInt(stamp.substring(15, 17));
-            int tp;
-            String first = stamp.substring(19, 24);
-            if (first.equals("wakes")) {
-                tp = -2;
-            } else if (first.equals("falls")) {
-                tp = -1;
+            String pattern = ".(\\d+).(\\d+).(\\d+) (\\d+):(\\d+). (\\w+)";
+            String IDpattern = "#(\\d+)";
+            Matcher tm = Pattern.compile(pattern).matcher(stamp);
+            Matcher idmatch = Pattern.compile(IDpattern).matcher(stamp);
+            int month = 0, day = 0, hr = 0, min = 0, tp;
+            if (tm.find()) {
+                month = Integer.parseInt(tm.group(2));
+                day = Integer.parseInt(tm.group(3));
+                hr = Integer.parseInt(tm.group(4));
+                min = Integer.parseInt(tm.group(5));
+            }
+            if (idmatch.find()) {
+                tp = Integer.parseInt(idmatch.group(1));
             } else {
-                int index = 26;
-                String id = "";
-                while (stamp.charAt(index) != ' ') {
-                    id += "" + stamp.charAt(index);
-                    index += 1;
-                }
-                tp = Integer.parseInt(id);
+                tp = -1;
             }
             stamps.add(new Timestamp(month, day, hr, min, tp));
         }
