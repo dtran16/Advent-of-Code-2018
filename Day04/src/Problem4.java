@@ -1,17 +1,12 @@
-import java.lang.reflect.Array;
-import java.util.Scanner;
+import java.util.*;
 import java.io.File;
-import java.util.ArrayList;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
 
 public class Problem4 {
-    static ArrayList <Timestamp> stamps = new ArrayList<> ();
-    static HashMap<Integer, int[]> counter = new HashMap<>();
-    static ArrayList <Integer> ids = new ArrayList<>();
+    static ArrayList <Timestamp> stamps = new ArrayList<> (); //list of time stamps
+    static HashMap<Integer, int[]> counter = new HashMap<>(); //maps ids to arrays that count the number of times asleep during a given minute
     public static void main(String[] args) throws IOException{
-        readIntoStamp();
+        readIntoStamp(); //read data in
         Collections.sort(stamps);
         int maxId = getMaxId();
         int[] maxArray = counter.get(maxId);
@@ -23,13 +18,14 @@ public class Problem4 {
                 maxValue = maxArray[a];
             }
         }
-        System.out.println(maxMinute * maxId);
+        System.out.println(maxMinute * maxId); //answer part 1
         //part 2
         int maxVal = Integer.MIN_VALUE;
         int maxIndex = 0;
         maxId = 0;
-        for (int i = 0; i < ids.size(); i += 1) {
-            int currId = ids.get(i);
+        Iterator<Integer> iter = counter.keySet().iterator();
+        while (iter.hasNext()) { //for each id, compares each of the maximum minutes
+            int currId = iter.next();
             int count[] = getMaxMinute(counter.get(currId));
             if (count[1] > maxVal) {
                 maxIndex = count[0];
@@ -37,8 +33,12 @@ public class Problem4 {
                 maxId = currId;
             }
         }
-        System.out.println(maxIndex * maxId);
+        System.out.println(maxIndex * maxId); //answer part 2
     }
+
+    /**
+     * Part 2
+     */
     public static int[] getMaxMinute(int[] arr) {
         int maxValue = Integer.MIN_VALUE;
         int maxIndex = 0;
@@ -48,38 +48,45 @@ public class Problem4 {
                 maxIndex = i;
             }
         }
-        return new int[] {maxIndex, maxValue};
+        return new int[] {maxIndex, maxValue}; //returns the maximum value and the minute it occurred as [minute, value]
     }
+
+    /**
+     * Part 1
+     */
     public static int getMaxId() {
         int max = Integer.MIN_VALUE;
         int maxId = 0;
         for (int i = 0; i < stamps.size(); i += 1) {
             int id = stamps.get(i).type;
-            ids.add(id);
-            if (!counter.containsKey(id)) {
-                counter.put(id, new int[61]);
-            }
+            if (!counter.containsKey(id)) { //if this id has not been tracked yet, add
+                counter.put(id, new int[61]); //initialize array to track number of times asleep during a given minute
+            }                                   // minute 60 is used to track the total time asleep for given guard
             int[] count = counter.get(id);
             while (i + 1 < stamps.size() && stamps.get(i+1).type < 0) {
                 i += 2;
-                int sleep = stamps.get(i - 1).min;
+                int sleep = stamps.get(i - 1).min; //falling asleep and waking up come in pairs
                 int wake = stamps.get(i).min;
                 count[60] += (wake - sleep);
-                for (int a = sleep; a < wake; a += 1) {
+                for (int a = sleep; a < wake; a += 1) { //update each minute
                     count[a] += 1;
                 }
             }
 
             int total = count[60];
-            if (total > max) {
+            if (total > max) { //update maximum
                 maxId = id;
                 max = total;
             }
         }
         return maxId;
     }
-    public static void readIntoStamp() throws IOException{
-        Scanner in = new Scanner(new File("input.txt"));
+
+    /**
+     * Reads all the data in
+     */
+    public static void readIntoStamp() throws IOException{ //parsing probably could've been done with regex expressions/patterns
+        Scanner in = new Scanner(new File("input.txt"));  //     but was not familiar with them
         while (in.hasNext()) {
             String stamp = in.nextLine();
             int month = Integer.parseInt(stamp.substring(6, 8));
@@ -104,6 +111,10 @@ public class Problem4 {
             stamps.add(new Timestamp(month, day, hr, min, tp));
         }
     }
+
+    /**
+     * Subclass to store timestamps and their elements
+     */
     public static class Timestamp implements Comparable <Timestamp>{
         public int month;
         public int day;
@@ -118,7 +129,7 @@ public class Problem4 {
             hr = h;
             min = mn;
         }
-        public int compareTo (Timestamp t) {
+        public int compareTo (Timestamp t) { // needed for sort
             if (month == t.month) {
                 if (day == t.day) {
                     if (hr == t.hr) {
@@ -129,9 +140,6 @@ public class Problem4 {
                 return day - t.day;
             }
             return month - t.month;
-        }
-        public String toString() {
-            return "Month: " + month + " Day: " + day + " Hour: " + hr + " Min: " + min + " Type: " + type;
         }
     }
 }
