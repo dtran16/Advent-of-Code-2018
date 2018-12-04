@@ -116,7 +116,7 @@ public class Problem4 {
     public static class Timestamp implements Comparable <Timestamp>{
         public int month;
         public int day;
-        public int type; // id for guard message, -1 for fall asleep, -2 for wake up
+        public int type; // id for guard message, -1 for fall asleep or wake up
         public int hr;
         public int min;
 
