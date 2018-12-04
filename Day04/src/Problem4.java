@@ -86,8 +86,8 @@ public class Problem4 {
     /**
      * Reads all the data in
      */
-    public static void readIntoStamp() throws IOException{ //parsing probably could've been done with regex expressions/patterns
-        Scanner in = new Scanner(new File("input.txt"));  //     but was not familiar with them
+    public static void readIntoStamp() throws IOException{
+        Scanner in = new Scanner(new File("input.txt"));
         while (in.hasNext()) {
             String stamp = in.nextLine();
             String pattern = ".(\\d+).(\\d+).(\\d+) (\\d+):(\\d+). (\\w+)";
