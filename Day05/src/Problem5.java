@@ -8,7 +8,7 @@ public class Problem5 {
         Scanner in = new Scanner(new File("input.txt"));
 
         while (in.hasNext()) {
-            
+
         }
 
     }
