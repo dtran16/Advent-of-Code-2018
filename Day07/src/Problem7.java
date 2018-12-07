@@ -35,6 +35,9 @@ public class Problem7 {
         }
         String res = bfs();
         System.out.println(res); //part 1
+
+        int[] workers = new int[5];
+
     }
     //breadth first search
     public static String bfs() {
@@ -70,5 +73,4 @@ public class Problem7 {
         }
         return true;
     }
-
 }
